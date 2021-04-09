@@ -34,7 +34,7 @@ generate_docker() {
            --user=neuro \
            --run 'mkdir -p ~/.jupyter && echo c.NotebookApp.ip = \"0.0.0.0\" > ~/.jupyter/jupyter_notebook_config.py' \
            --workdir '/home/neuro/workdir' \
-           --cmd jupyter lab
+           --cmd 'jupyter lab'
 }
 
 # Generate Singularity File
