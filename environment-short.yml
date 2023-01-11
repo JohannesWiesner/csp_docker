@@ -1,0 +1,45 @@
+channels:
+- conda-forge
+- plotly
+- ejolly
+- districtdatalabs
+- pytorch
+- pyviz
+- bokeh
+- defaults
+dependencies:
+- r-essentials
+- r-matrixstats
+- r-repr
+- r-devtools
+- jupyterlab
+- r-base=4.1
+- r-pma
+- r-dendextend
+- r-circlize
+- bokeh
+- sklearn-pandas
+- datalad
+- tableone
+- spyder
+- scikit-learn
+- nilearn
+- nipype
+- dash
+- dash-bootstrap-components
+- statannotations
+- fastcluster
+- pingouin
+- mne
+- tensorboardx
+- neurokit2
+- yellowbrick
+- pymer4
+- plotly-orca
+- plotly
+- pytorch
+- holoviews
+- python=3.9
+- pip
+- pip:
+  - -r requirements.txt
