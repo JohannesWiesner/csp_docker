@@ -57,7 +57,7 @@ set -e
 # --run '/opt/miniconda-latest/bin/conda config --set channel_priority strict' \
 # --run '/opt/miniconda-latest/bin/conda env update -n base --file /home/neuro/localdata/example-env.yml' \
 #
-# --workdir /home/neuro/code \
+# --workdir /home/neuro/code \ 
 
 YAML_FILE=$1
 echo "Adding yaml-file ${YAML_FILE} to be installed in conda. Make sure that no prefix and no name are defined!"
