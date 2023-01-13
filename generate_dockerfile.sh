@@ -91,17 +91,8 @@ generate_docker() {
         --run 'mkdir /home/neuro/data && chmod 777 /home/neuro/data && chmod a+s /home/neuro/data' \
         --run 'mkdir /home/neuro/output && chmod 777 /home/neuro/output && chmod a+s /home/neuro/output' \
         --run 'mkdir /home/neuro/code && chmod 777 /home/neuro/code && chmod a+s /home/neuro/code' \
-        --run 'mkdir /home/neuro/.jupyter && echo c.NotebookApp.ip = \"0.0.0.0\" > home/neuro/.jupyter/jupyter_notebook_config.py' \
-        --entrypoint jupyter-notebook /home/neuro
+        --run 'mkdir /home/neuro/.jupyter && echo c.NotebookApp.ip = \"0.0.0.0\" > home/neuro/.jupyter/jupyter_notebook_config.py'
 }
 
-# function to execute a create a singularity definition
-generate_singularity() {
-    docker run --rm repronim/neurodocker:0.7.0 generate singularity \
-    
-}
-# run functions
+# generate Dockerfile
 generate_docker > Dockerfile
-#generate_singularity > Singularity
-
-

@@ -144,7 +144,6 @@ RUN mkdir /home/neuro/data && chmod 777 /home/neuro/data && chmod a+s /home/neur
 RUN mkdir /home/neuro/output && chmod 777 /home/neuro/output && chmod a+s /home/neuro/output
 RUN mkdir /home/neuro/code && chmod 777 /home/neuro/code && chmod a+s /home/neuro/code
 RUN mkdir /home/neuro/.jupyter && echo c.NotebookApp.ip = \"0.0.0.0\" > home/neuro/.jupyter/jupyter_notebook_config.py
-ENTRYPOINT ["jupyter-notebook", "/home/neuro"]
 
 # Save specification to JSON.
 USER root
@@ -302,15 +301,6 @@ RUN printf '{ \
       "name": "run", \
       "kwds": { \
         "command": "mkdir /home/neuro/.jupyter && echo c.NotebookApp.ip = \\\\\\"0.0.0.0\\\\\\" > home/neuro/.jupyter/jupyter_notebook_config.py" \
-      } \
-    }, \
-    { \
-      "name": "entrypoint", \
-      "kwds": { \
-        "args": [ \
-          "jupyter-notebook", \
-          "/home/neuro" \
-        ] \
       } \
     } \
   ] \
