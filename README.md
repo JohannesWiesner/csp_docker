@@ -4,7 +4,7 @@
 The latest version can be found on [docker hub](https://hub.docker.com/r/johanneswiesner/csp/tags). You can pull the image by running `docker pull johanneswiesner/csp:1.1.0`
 
 ## How to build the docker image yourself
-1. Clone this repository (including the `tcy submodule) to your machine using `git clone --recurse-submodules https://github.com/JohannesWiesner/csp_docker.git`
+1. Clone this repository (including the `tcy` submodule) to your machine using `git clone --recurse-submodules https://github.com/JohannesWiesner/csp_docker.git`
 2. Run script to create the dockerfile: `generate_dockerfile.sh example-env.yml`
 3. Build the image through `docker build -t imagename .`
 4. Create container with image through `docker run -t -i --rm -p 8888:8888 name_of_image`
