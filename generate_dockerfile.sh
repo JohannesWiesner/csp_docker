@@ -18,7 +18,6 @@ set -e
 ##           TBD               ##
 #################################
 # + generalize yml-file for conda environment so that a yml-file can be given as a parameter for script
-# + test whether installation of afni, ants, fsl, mricron via the neurodocker options and not the repositories of neurodebian gets software more up to date
 
 #################################
 ##      Code snippets          ##
