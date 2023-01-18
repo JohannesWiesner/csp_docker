@@ -39,8 +39,8 @@ set -e
 #
 # --workdir /home/csp/code \ 
 
-YAML_FILE=$1
-echo "Adding yaml-file ${YAML_FILE} to be installed in conda. Make sure that no prefix and no name are defined!"
+conda_yml_file=$1
+echo "Adding yaml-file ${conda_yml_file} to be installed in conda. Make sure that no prefix and no name are defined!"
 
 # function to create a dockerfile
 generate_docker() {
@@ -63,9 +63,9 @@ generate_docker() {
         --miniconda \
             version=latest \
             conda_install="jupyter" \
-        --copy $YAML_FILE /tmp/ \
+        --copy $conda_yml_file /tmp/ \
         --run '/opt/miniconda-latest/bin/conda config --set channel_priority strict' \
-        --run "/opt/miniconda-latest/bin/conda env update -n base --file /tmp/${YAML_FILE}" \
+        --run "/opt/miniconda-latest/bin/conda env update -n base --file /tmp/${conda_yml_file}" \
         --user csp \
         --run 'rm -rf /opt/conda/pkgs/*' \
         --run 'mkdir /home/csp/data && chmod 777 /home/csp/data && chmod a+s /home/csp/data' \
