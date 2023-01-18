@@ -136,14 +136,14 @@ COPY ["example-env.yml", \
       "/tmp/"]
 RUN /opt/miniconda-latest/bin/conda config --set channel_priority strict
 RUN /opt/miniconda-latest/bin/conda env update -n base --file /tmp/example-env.yml
-RUN test "$(getent passwd neuro)" \
-    || useradd --no-user-group --create-home --shell /bin/bash neuro
-USER neuro
+RUN test "$(getent passwd csp)" \
+    || useradd --no-user-group --create-home --shell /bin/bash csp
+USER csp
 RUN rm -rf /opt/conda/pkgs/*
-RUN mkdir /home/neuro/data && chmod 777 /home/neuro/data && chmod a+s /home/neuro/data
-RUN mkdir /home/neuro/output && chmod 777 /home/neuro/output && chmod a+s /home/neuro/output
-RUN mkdir /home/neuro/code && chmod 777 /home/neuro/code && chmod a+s /home/neuro/code
-RUN mkdir /home/neuro/.jupyter && echo c.NotebookApp.ip = \"0.0.0.0\" > home/neuro/.jupyter/jupyter_notebook_config.py
+RUN mkdir /home/csp/data && chmod 777 /home/csp/data && chmod a+s /home/csp/data
+RUN mkdir /home/csp/output && chmod 777 /home/csp/output && chmod a+s /home/csp/output
+RUN mkdir /home/csp/code && chmod 777 /home/csp/code && chmod a+s /home/csp/code
+RUN mkdir /home/csp/.jupyter && echo c.NotebookApp.ip = \"0.0.0.0\" > home/csp/.jupyter/jupyter_notebook_config.py
 
 # Save specification to JSON.
 USER root
@@ -270,7 +270,7 @@ RUN printf '{ \
     { \
       "name": "user", \
       "kwds": { \
-        "user": "neuro" \
+        "user": "csp" \
       } \
     }, \
     { \
@@ -282,28 +282,28 @@ RUN printf '{ \
     { \
       "name": "run", \
       "kwds": { \
-        "command": "mkdir /home/neuro/data && chmod 777 /home/neuro/data && chmod a+s /home/neuro/data" \
+        "command": "mkdir /home/csp/data && chmod 777 /home/csp/data && chmod a+s /home/csp/data" \
       } \
     }, \
     { \
       "name": "run", \
       "kwds": { \
-        "command": "mkdir /home/neuro/output && chmod 777 /home/neuro/output && chmod a+s /home/neuro/output" \
+        "command": "mkdir /home/csp/output && chmod 777 /home/csp/output && chmod a+s /home/csp/output" \
       } \
     }, \
     { \
       "name": "run", \
       "kwds": { \
-        "command": "mkdir /home/neuro/code && chmod 777 /home/neuro/code && chmod a+s /home/neuro/code" \
+        "command": "mkdir /home/csp/code && chmod 777 /home/csp/code && chmod a+s /home/csp/code" \
       } \
     }, \
     { \
       "name": "run", \
       "kwds": { \
-        "command": "mkdir /home/neuro/.jupyter && echo c.NotebookApp.ip = \\\\\\"0.0.0.0\\\\\\" > home/neuro/.jupyter/jupyter_notebook_config.py" \
+        "command": "mkdir /home/csp/.jupyter && echo c.NotebookApp.ip = \\\\\\"0.0.0.0\\\\\\" > home/csp/.jupyter/jupyter_notebook_config.py" \
       } \
     } \
   ] \
 }' > /.reproenv.json
-USER neuro
+USER csp
 # End saving to specification to JSON.
