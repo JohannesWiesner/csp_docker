@@ -15,11 +15,6 @@ set -e
 #       --mricron \
 
 #################################
-##           TBD               ##
-#################################
-# + generalize yml-file for conda environment so that a yml-file can be given as a parameter for script
-
-#################################
 ##      Code snippets          ##
 #################################
 #       to be tried again:
