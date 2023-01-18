@@ -7,12 +7,6 @@ set -e
 ## Used resources in Container ##
 #################################
 # + tbd tried: rstudio,  surf ice, MRICroGl (insted of MRICron), cat12
-# + to be tried again as parameters of cspdocker (see snippets below):
-#       --afni
-#       --spm12 \
-#       --fsl \
-#       --ants \
-#       --mricron \
 
 #################################
 ##      Code snippets          ##
