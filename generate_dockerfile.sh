@@ -17,7 +17,6 @@ set -e
 #################################
 ##           TBD               ##
 #################################
-# + set up IDE (maybe VSC (https://code.visualstudio.com/docs/devcontainers/tutorial), VSCodium, jupyter notebook, spyder?)
 # + generalize yml-file for conda environment so that a yml-file can be given as a parameter for script
 # + test whether installation of afni, ants, fsl, mricron via the neurodocker options and not the repositories of neurodebian gets software more up to date
 
