@@ -39,8 +39,17 @@ set -e
 #
 # --workdir /home/csp/code \ 
 
-conda_yml_file=$1
-echo "Adding yaml-file ${conda_yml_file} to be installed in conda. Make sure that no prefix and no name are defined!"
+if [ -n "$1" ]; then
+    conda_yml_file=$1
+    echo "Using the provided .yml file"
+else
+    python ./tcy/tcy.py csp docker linux --ignore_yml_name --no_pip_requirements_file --tsv_path ./tcy/packages.tsv --yml_dir .
+    conda_yml_file=./environment.yml
+    echo "Using the .yml file as generated with the tcy submodule"
+fi
+
+
+echo "Adding yaml-file ${conda_yml_file} to be installed in conda. Make sure that the .yml file does not contain a name nor a prefix"
 
 # function to create a dockerfile
 generate_docker() {

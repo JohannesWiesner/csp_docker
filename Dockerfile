@@ -132,10 +132,10 @@ RUN apt-get update -qq \
     # Clean up
     && sync && conda clean --all --yes && sync \
     && rm -rf ~/.cache/pip/*
-COPY ["example-env.yml", \
+COPY ["./environment.yml", \
       "/tmp/"]
 RUN /opt/miniconda-latest/bin/conda config --set channel_priority strict
-RUN /opt/miniconda-latest/bin/conda env update -n base --file /tmp/example-env.yml
+RUN /opt/miniconda-latest/bin/conda env update -n base --file /tmp/./environment.yml
 RUN test "$(getent passwd csp)" \
     || useradd --no-user-group --create-home --shell /bin/bash csp
 USER csp
@@ -249,7 +249,7 @@ RUN printf '{ \
       "name": "copy", \
       "kwds": { \
         "source": [ \
-          "example-env.yml", \
+          "./environment.yml", \
           "/tmp/" \
         ], \
         "destination": "/tmp/" \
@@ -264,7 +264,7 @@ RUN printf '{ \
     { \
       "name": "run", \
       "kwds": { \
-        "command": "/opt/miniconda-latest/bin/conda env update -n base --file /tmp/example-env.yml" \
+        "command": "/opt/miniconda-latest/bin/conda env update -n base --file /tmp/./environment.yml" \
       } \
     }, \
     { \

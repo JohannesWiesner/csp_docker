@@ -5,9 +5,9 @@ The latest version can be found on [docker hub](https://hub.docker.com/r/johanne
 
 ## How to build the docker image yourself
 1. Clone this repository (including the `tcy` submodule) to your machine using `git clone --recurse-submodules https://github.com/JohannesWiesner/csp_docker.git`
-2. Run script to create the dockerfile: `generate_dockerfile.sh example-env.yml`
-3. Build the image through `docker build -t imagename .`
-4. Create container with image through `docker run -t -i --rm -p 8888:8888 name_of_image`
+2. Run script to create the Dockerfile: `bash generate_dockerfile.sh`. This by default will create an environment.yml file using the `tcy` submodule in the directory and use this as an input for conda. For testing purposes it's also possible to provide a `.yml` file of your choice (e.g. `test_env.yml`) using `bash generate_dockerfile.sh path/to/your/file.yml`
+3. Build the image through `docker build -t test:latest .`
+4. Run image as container using `docker run -t -i --rm -p 8888:8888 test:latest`
 
 ## Remarks on adjusting the image to your needs and contribute
 1. Make sure you run `generate_dockerfile.sh`  and `docker build` on a regular basis (preferably after every single edit). This is tedious but in our experience, too many edits at once make it hard to debug what went wrong. The neurodocker image is still under heavy development which means that it is not guaranteed that every combination of arguments that you pass to docker `run -i --rm repronim/neurodocker:x.x.x generate docker` will lead to a bug-free Dockerfile

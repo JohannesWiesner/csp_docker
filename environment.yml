@@ -2,10 +2,10 @@ channels:
 - conda-forge
 - plotly
 - ejolly
-- districtdatalabs
-- pytorch
 - pyviz
+- districtdatalabs
 - bokeh
+- pytorch
 - defaults
 dependencies:
 - r-essentials
@@ -57,3 +57,4 @@ dependencies:
   - pyvis
   - distro
   - abagen
+  - openpyxl
