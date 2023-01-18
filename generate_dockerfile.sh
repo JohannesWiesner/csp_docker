@@ -74,7 +74,6 @@ generate_docker() {
         --copy $conda_yml_file /tmp/ \
         --run "conda env update -n base --file /tmp/${conda_yml_file}" \
         --user csp \
-        --run 'rm -rf /opt/conda/pkgs/*' \
         --run 'mkdir /home/csp/data && chmod 777 /home/csp/data && chmod a+s /home/csp/data' \
         --run 'mkdir /home/csp/output && chmod 777 /home/csp/output && chmod a+s /home/csp/output' \
         --run 'mkdir /home/csp/code && chmod 777 /home/csp/code && chmod a+s /home/csp/code' \

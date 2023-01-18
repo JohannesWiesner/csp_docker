@@ -136,7 +136,6 @@ RUN conda env update -n base --file /tmp/test_env.yml
 RUN test "$(getent passwd csp)" \
     || useradd --no-user-group --create-home --shell /bin/bash csp
 USER csp
-RUN rm -rf /opt/conda/pkgs/*
 RUN mkdir /home/csp/data && chmod 777 /home/csp/data && chmod a+s /home/csp/data
 RUN mkdir /home/csp/output && chmod 777 /home/csp/output && chmod a+s /home/csp/output
 RUN mkdir /home/csp/code && chmod 777 /home/csp/code && chmod a+s /home/csp/code
@@ -262,12 +261,6 @@ RUN printf '{ \
       "name": "user", \
       "kwds": { \
         "user": "csp" \
-      } \
-    }, \
-    { \
-      "name": "run", \
-      "kwds": { \
-        "command": "rm -rf /opt/conda/pkgs/*" \
       } \
     }, \
     { \
