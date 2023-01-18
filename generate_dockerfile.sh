@@ -2,12 +2,6 @@
 
 # halt, if script produces an error
 set -e
-#################################
-##      General remarks        ##
-#################################
-# + baseimage: apparantly different options like spm12, afni, and fsl do not run under debian bookworm, thus stretch as base
-# + when installing packages with apt-get in cspdebian, the user is asked whether to take part in a package usage survey, which interferes with the
-#   build, thus we set "DEBIAN_FRONTEND='noninteractive'"
 
 #################################
 ## Used resources in Container ##
@@ -26,7 +20,7 @@ set -e
 # + set up IDE (maybe VSC (https://code.visualstudio.com/docs/devcontainers/tutorial), VSCodium, jupyter notebook, spyder?)
 # + make sure conda env is activated or added to path
 # + generalize yml-file for conda environment so that a yml-file can be given as a parameter for script
-# + test whether installation of afni, ants, fsl, mricron via the cspdocker options and not the repositories of cspdebian gets software more up to date
+# + test whether installation of afni, ants, fsl, mricron via the neurodocker options and not the repositories of neurodebian gets software more up to date
 
 #################################
 ##      Code snippets          ##
