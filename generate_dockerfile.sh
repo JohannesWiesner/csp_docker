@@ -53,7 +53,7 @@ echo "Adding yaml-file ${conda_yml_file} to be installed in conda. Make sure tha
 
 # function to create a dockerfile
 generate_docker() {
-    docker run -i --rm repronim/neurodocker:0.9.1 generate docker \
+    docker run -i --rm repronim/neurodocker:0.9.4 generate docker \
         --base-image neurodebian:stretch-non-free \
         --arg DEBIAN_FRONTEND='noninteractive' \
         --pkg-manager apt \
@@ -71,10 +71,8 @@ generate_docker() {
             version=7.1.1 \
         --miniconda \
             version=latest \
-            conda_install="jupyter" \
         --copy $conda_yml_file /tmp/ \
-        --run '/opt/miniconda-latest/bin/conda config --set channel_priority strict' \
-        --run "/opt/miniconda-latest/bin/conda env update -n base --file /tmp/${conda_yml_file}" \
+        --run "conda env update -n base --file /tmp/${conda_yml_file}" \
         --user csp \
         --run 'rm -rf /opt/conda/pkgs/*' \
         --run 'mkdir /home/csp/data && chmod 777 /home/csp/data && chmod a+s /home/csp/data' \

@@ -5,7 +5,7 @@ The latest version can be found on [docker hub](https://hub.docker.com/r/johanne
 
 ## How to build the docker image yourself
 1. Clone this repository (including the `tcy` submodule) to your machine using `git clone --recurse-submodules https://github.com/JohannesWiesner/csp_docker.git`
-2. Run script to create the Dockerfile: `bash generate_dockerfile.sh`. This by default will create an environment.yml file using the `tcy` submodule in the directory and use this as an input for conda. For testing purposes it's also possible to provide a `.yml` file of your choice (e.g. `test_env.yml`) using `bash generate_dockerfile.sh path/to/your/file.yml`
+2. Run script to create the Dockerfile: `bash generate_dockerfile.sh`. This by default will create an `environment.yml` file using the `tcy` submodule in the directory and use this as an input for conda. For testing purposes it's also possible to provide a `.yml` file of your choice (e.g. `test_env.yml`) using `bash generate_dockerfile.sh path/to/your/file.yml`
 3. Build the image through `docker build -t test:latest .`
 4. Run image as container using `docker run -t -i --rm -p 8888:8888 test:latest`
 

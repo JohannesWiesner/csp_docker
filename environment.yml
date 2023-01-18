@@ -1,11 +1,11 @@
 channels:
 - conda-forge
 - plotly
-- ejolly
 - pyviz
+- ejolly
+- pytorch
 - districtdatalabs
 - bokeh
-- pytorch
 - defaults
 dependencies:
 - r-essentials
