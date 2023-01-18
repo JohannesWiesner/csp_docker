@@ -1,0 +1,4 @@
+[submodule "tcy"]
+	path = tcy
+	url = https://github.com/JohannesWiesner/tcy.git
+	branch = main
