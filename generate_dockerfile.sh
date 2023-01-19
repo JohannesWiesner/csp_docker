@@ -38,13 +38,12 @@ set -e
 # --run '/opt/miniconda-latest/bin/conda env update -n base --file /home/csp/localdata/example-env.yml' \
 #
 # --workdir /home/csp/code \ 
-
 if [ -n "$1" ]; then
     conda_yml_file=$1
     echo "Using the provided .yml file"
 else
     python ./tcy/tcy.py csp docker linux --ignore_yml_name --no_pip_requirements_file --tsv_path ./tcy/packages.tsv --yml_dir .
-    conda_yml_file=./environment.yml
+    conda_yml_file=environment.yml
     echo "Using the .yml file as generated with the tcy submodule"
 fi
 
@@ -61,23 +60,21 @@ generate_docker() {
             gcc \
             g++ \
             octave \
-            afni \
-            ants \
-            fsl \
-            mricron \
         --spm12 \
             version=r7771 \
         --freesurfer \
             version=7.1.1 \
+        --copy $conda_yml_file /tmp/ \
         --miniconda \
             version=latest \
-        --copy $conda_yml_file /tmp/ \
-        --run "conda env update -n base --file /tmp/${conda_yml_file}" \
+            yaml_file=/tmp/$conda_yml_file \
+            env_name=csp \
         --user csp \
         --run 'mkdir /home/csp/data && chmod 777 /home/csp/data && chmod a+s /home/csp/data' \
         --run 'mkdir /home/csp/output && chmod 777 /home/csp/output && chmod a+s /home/csp/output' \
         --run 'mkdir /home/csp/code && chmod 777 /home/csp/code && chmod a+s /home/csp/code' \
-        --run 'mkdir /home/csp/.jupyter && echo c.NotebookApp.ip = \"0.0.0.0\" > home/csp/.jupyter/jupyter_notebook_config.py'
+        --run 'mkdir /home/csp/.jupyter && echo c.NotebookApp.ip = \"0.0.0.0\" > home/csp/.jupyter/jupyter_notebook_config.py' \
+        --workdir /home/csp/code
 }
 
 # generate Dockerfile

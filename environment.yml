@@ -1,10 +1,10 @@
 channels:
 - conda-forge
 - plotly
-- pyviz
 - ejolly
-- pytorch
 - districtdatalabs
+- pytorch
+- pyviz
 - bokeh
 - defaults
 dependencies:
