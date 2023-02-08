@@ -8,7 +8,7 @@ if [ -n "$1" ]; then
     conda_yml_file=$1
     echo "Using the provided .yml file"
 else
-    python ./tcy/tcy.py csp docker linux --ignore_yml_name --no_pip_requirements_file --tsv_path ./tcy/packages.tsv --yml_dir .
+    python ./tcy/tcy.py linux --tsv_path ./tcy/packages.tsv
     conda_yml_file=environment.yml
     echo "Using the .yml file as generated with the tcy submodule"
 fi
@@ -19,7 +19,6 @@ echo "Adding yaml-file ${conda_yml_file} to be installed in conda. Make sure tha
 generate_docker() {
     docker run -i --rm repronim/neurodocker:0.9.4 generate docker \
         --base-image neurodebian:stretch-non-free \
-        --yes \
         --pkg-manager apt \
         --install opts="--quiet" \
             gcc \
