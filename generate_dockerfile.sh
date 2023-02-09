@@ -24,10 +24,8 @@ generate_docker() {
             gcc \
             g++ \
             octave \
-        --spm12 \
-            version=r7771 \
-        --freesurfer \
-            version=7.1.1 \
+        --spm12 version=r7771 \
+        --freesurfer version=7.1.1 \
         --copy $conda_yml_file /tmp/ \
         --miniconda \
             version=latest \
