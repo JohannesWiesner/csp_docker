@@ -1,5 +1,5 @@
-# don't ignore the testing folder structure but ignore all files in data, since this may contain sensitive data
-testing/*
-!/testing/code/
+# ignore everything inside the testing/data folder because this may contain sensitive data
+testing/data/*
+!testing/data/.gitkeep
 
 
