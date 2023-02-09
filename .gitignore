@@ -1,0 +1,7 @@
+# don't ignore the testing folder structure but ignore all files in data, since this may contain sensitive data
+testing/
+!/testing/code
+!/testing/output
+testing/data/**
+
+
