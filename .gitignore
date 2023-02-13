@@ -1,0 +1,5 @@
+# ignore everything inside the testing/data folder because this may contain sensitive data
+testing/data/*
+!testing/data/.gitkeep
+
+

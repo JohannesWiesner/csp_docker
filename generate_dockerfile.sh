@@ -3,50 +3,15 @@
 # halt, if script produces an error
 set -e
 
-#################################
-## Used resources in Container ##
-#################################
-# + tbd tried: rstudio,  surf ice, MRICroGl (insted of MRICron), cat12
-
-#################################
-##      Code snippets          ##
-#################################
-#       to be tried again:
-#        --afni \
-#            version=latest \
-#        --run 'conda activate csp_surname_name' \
-#        --spm12 \
-#            version=r7771 \
-#       --fsl \
-#            version=6.0.4
-#       --ants \
-#            version=2.3.1 \
-#        --mricron \
-#            version=1.0.20190902 \
-# + conda: dependant on the first parameter
-#        yaml_file=environment-short.yml \
-#  --run '/opt/miniconda-latest/bin/conda init bash' \
-#        --run '/opt/miniconda-latest/bin/conda activate example-environment' \
-# --user csp \
-# --env PATH='/opt/miniconda-latest/bin:$PATH' \
-# --entrypoint 'jupyter-notebook'
-#
-# --run 'mkdir /home/csp/localdata && chmod 777 /home/csp/localdata && chmod a+s /home/csp/localdata' \
-# --copy example-env.yml /tmp/ \
-# --user root \
-# --run '/opt/miniconda-latest/bin/conda config --set channel_priority strict' \
-# --run '/opt/miniconda-latest/bin/conda env update -n base --file /home/csp/localdata/example-env.yml' \
-#
-# --workdir /home/csp/code \ 
+# generate a .yml file for conda using the tcy submodule or use the .yml file provided as argument to this script
 if [ -n "$1" ]; then
     conda_yml_file=$1
     echo "Using the provided .yml file"
 else
-    python ./tcy/tcy.py csp docker linux --ignore_yml_name --no_pip_requirements_file --tsv_path ./tcy/packages.tsv --yml_dir .
+    python ./tcy/tcy.py linux --tsv_path ./tcy/packages.tsv
     conda_yml_file=environment.yml
     echo "Using the .yml file as generated with the tcy submodule"
 fi
-
 
 echo "Adding yaml-file ${conda_yml_file} to be installed in conda. Make sure that the .yml file does not contain a name nor a prefix"
 
@@ -54,16 +19,13 @@ echo "Adding yaml-file ${conda_yml_file} to be installed in conda. Make sure tha
 generate_docker() {
     docker run -i --rm repronim/neurodocker:0.9.4 generate docker \
         --base-image neurodebian:stretch-non-free \
-        --arg DEBIAN_FRONTEND='noninteractive' \
         --pkg-manager apt \
         --install opts="--quiet" \
             gcc \
             g++ \
             octave \
-        --spm12 \
-            version=r7771 \
-        --freesurfer \
-            version=7.1.1 \
+        --spm12 version=r7771 \
+        --freesurfer version=7.1.1 \
         --copy $conda_yml_file /tmp/ \
         --miniconda \
             version=latest \
@@ -74,7 +36,8 @@ generate_docker() {
         --run 'mkdir /home/csp/output && chmod 777 /home/csp/output && chmod a+s /home/csp/output' \
         --run 'mkdir /home/csp/code && chmod 777 /home/csp/code && chmod a+s /home/csp/code' \
         --run 'mkdir /home/csp/.jupyter && echo c.NotebookApp.ip = \"0.0.0.0\" > home/csp/.jupyter/jupyter_notebook_config.py' \
-        --workdir /home/csp/code
+        --workdir /home/csp/code \
+        --run 'echo source activate csp >> /home/csp/.bashrc'
 }
 
 # generate Dockerfile

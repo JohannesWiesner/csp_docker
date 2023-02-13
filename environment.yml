@@ -1,23 +1,27 @@
 channels:
 - conda-forge
 - plotly
-- ejolly
+- bokeh
 - districtdatalabs
+- ejolly
 - pytorch
 - pyviz
-- bokeh
+- r
 - defaults
 dependencies:
+- arrow
 - r-essentials
 - r-matrixstats
 - r-repr
 - r-devtools
 - jupyterlab
-- r-base=4.1
+- r-base>=4.1
 - r-pma
 - r-dendextend
 - r-circlize
+- rstudio
 - bokeh
+- pyarrow
 - sklearn-pandas
 - datalad
 - tableone
@@ -39,7 +43,7 @@ dependencies:
 - plotly
 - pytorch
 - holoviews
-- python=3.9
+- python>=3.11
 - pip
 - pip:
   - lckr-jupyterlab-variableinspector
@@ -53,6 +57,7 @@ dependencies:
   - bctpy
   - gemmr
   - gower
+  - resample
   - antropy
   - pyvis
   - distro

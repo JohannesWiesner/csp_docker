@@ -1,5 +1,3 @@
 dependencies:
-  - numpy
-  - pip
-  - pip:
-    - pytest
+  - jupyterlab
+  - nipype
