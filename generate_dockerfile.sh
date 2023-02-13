@@ -96,7 +96,7 @@ build_docker() {
 }
 
 run_docker(){
-    docker run -t -i --rm -p 8888:8888  cspdocker:test
+    docker run -t -i --rm -p 8888:8888 -v ${PWD}/testing/code:/home/csp/code -v ${PWD}/testing/data:/home/csp/data -v ${PWD}/testing/output:/home/csp/output cspdocker:test
 }
 # generate Dockerfile
 
