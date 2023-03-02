@@ -1,5 +1,9 @@
-# ignore everything inside the testing/data folder because this may contain sensitive data
+# ignore everything inside the testing/data folder because this may contain sensitive data,
+# but do not ignore folder structure itself so other users have the /testing folder and its subfolders
+# when cloning this repository
 testing/data/*
 !testing/data/.gitkeep
 
+# ignore jupyter-notebook stuff anywhere in this repository
+**/.ipynb_checkpoints/
 
