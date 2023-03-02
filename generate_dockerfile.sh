@@ -16,7 +16,7 @@ conda_yml_file=environment.yml
 echo "HINT:
     The script defaults to just create the Dockerfile and use the conda environment created by the submodule.
     To build and run the the docker container set the argument '--mode testing'.
-    To give a custom yml-file set the arguement '--yaml-file pathtofile.yml (Make sure that the .yml file does not contain a name nor a prefix)"
+    To give a custom yml-file set the argument '--yaml-file pathtofile.yml (Make sure that the .yml file does not contain a name nor a prefix)"
 
 # read arguments
 opts=$(getopt \
@@ -40,7 +40,7 @@ while [[ $# -gt 0 ]]; do
         #echo "The execution mode has been set to 'testing'"
         mode="testing"
       else
-        echo "Error: Invalid value for arguement '--mode'! The implemented modes are 'normal' and 'testing'"
+        echo "Error: Invalid value for argument '--mode'! The implemented modes are 'normal' and 'testing'"
         exit
     fi
       shift 2
@@ -52,7 +52,7 @@ while [[ $# -gt 0 ]]; do
         #echo "The path for the used yaml-file is $2" 
         conda_yml_file=$2
       else
-        echo "Error: No valid path provided for arguement '--yaml-file'!"
+        echo "Error: No valid path provided for argument '--yaml-file'!"
         exit
       fi
       shift 2
@@ -82,21 +82,22 @@ generate_docker() {
             version=latest \
             yaml_file=/tmp/$conda_yml_file \
             env_name=csp \
-        --user csp \
-        --run 'mkdir /home/csp/data && chmod 777 /home/csp/data && chmod a+s /home/csp/data' \
-        --run 'mkdir /home/csp/output && chmod 777 /home/csp/output && chmod a+s /home/csp/output' \
-        --run 'mkdir /home/csp/code && chmod 777 /home/csp/code && chmod a+s /home/csp/code' \
-        --run 'mkdir /home/csp/.jupyter && echo c.NotebookApp.ip = \"0.0.0.0\" > home/csp/.jupyter/jupyter_notebook_config.py' \
-        --workdir /home/csp/code \
-        --run 'echo source activate csp >> /home/csp/.bashrc'
+        --run 'mkdir /code && chmod 777 /code && chmod a+s /code' \
+        --run 'mkdir /data && chmod 777 /data && chmod a+s /data' \
+        --run 'mkdir /output && chmod 777 /output && chmod a+s /output' \
+        --run 'mkdir ~root/.jupyter' \
+        --run 'echo c.NotebookApp.ip = \"0.0.0.0\" > ~root/.jupyter/jupyter_notebook_config.py' \
+        --run 'echo c.NotebookApp.allow_root=True >> ~root/.jupyter/jupyter_notebook_config.py' \
+        --run 'echo source activate csp >> ~root/.bashrc' \
+        --workdir '/code'
 }
 
 build_docker() {
-    docker build -t cspdocker:test .
+    docker build -t csp_docker:test .
 }
 
 run_docker(){
-    docker run -t -i --rm -p 8888:8888 -v ${PWD}/testing/code:/home/csp/code -v ${PWD}/testing/data:/home/csp/data -v ${PWD}/testing/output:/home/csp/output cspdocker:test
+    docker run -t -i --rm -p 8888:8888 -v ${PWD}/testing/code:/code -v ${PWD}/testing/data:/data -v ${PWD}/testing/output:/output csp_docker:test
 }
 # generate Dockerfile
 

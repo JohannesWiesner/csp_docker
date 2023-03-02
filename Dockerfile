@@ -95,7 +95,7 @@ RUN apt-get update -qq \
          --exclude='subjects/fsaverage6' \
          --exclude='subjects/fsaverage_sym' \
          --exclude='trctrain'
-COPY ["test_env.yml", \
+COPY ["environment.yml", \
       "/tmp/"]
 ENV CONDA_DIR="/opt/miniconda-latest" \
     PATH="/opt/miniconda-latest/bin:$PATH"
@@ -124,22 +124,20 @@ RUN apt-get update -qq \
     && conda config --system --set show_channel_urls true \
     # Enable `conda activate`
     && conda init bash \
-    && conda env create  --name csp --file /tmp/test_env.yml \
+    && conda env create  --name csp --file /tmp/environment.yml \
     # Clean up
     && sync && conda clean --all --yes && sync \
     && rm -rf ~/.cache/pip/*
-RUN test "$(getent passwd csp)" \
-    || useradd --no-user-group --create-home --shell /bin/bash csp
-USER csp
-RUN mkdir /home/csp/data && chmod 777 /home/csp/data && chmod a+s /home/csp/data
-RUN mkdir /home/csp/output && chmod 777 /home/csp/output && chmod a+s /home/csp/output
-RUN mkdir /home/csp/code && chmod 777 /home/csp/code && chmod a+s /home/csp/code
-RUN mkdir /home/csp/.jupyter && echo c.NotebookApp.ip = \"0.0.0.0\" > home/csp/.jupyter/jupyter_notebook_config.py
-WORKDIR /home/csp/code
-RUN echo source activate csp >> /home/csp/.bashrc
+RUN mkdir /code && chmod 777 /code && chmod a+s /code
+RUN mkdir /data && chmod 777 /data && chmod a+s /data
+RUN mkdir /output && chmod 777 /output && chmod a+s /output
+RUN mkdir ~root/.jupyter
+RUN echo c.NotebookApp.ip = \"0.0.0.0\" > ~root/.jupyter/jupyter_notebook_config.py
+RUN echo c.NotebookApp.allow_root=True >> ~root/.jupyter/jupyter_notebook_config.py
+RUN echo source activate csp >> ~root/.bashrc
+WORKDIR /code
 
 # Save specification to JSON.
-USER root
 RUN printf '{ \
   "pkg_manager": "apt", \
   "existing_users": [ \
@@ -218,7 +216,7 @@ RUN printf '{ \
       "name": "copy", \
       "kwds": { \
         "source": [ \
-          "test_env.yml", \
+          "environment.yml", \
           "/tmp/" \
         ], \
         "destination": "/tmp/" \
@@ -234,52 +232,57 @@ RUN printf '{ \
     { \
       "name": "run", \
       "kwds": { \
-        "command": "apt-get update -qq\\napt-get install -y -q --no-install-recommends \\\\\\n    bzip2 \\\\\\n    ca-certificates \\\\\\n    curl\\nrm -rf /var/lib/apt/lists/*\\n# Install dependencies.\\nexport PATH=\\"/opt/miniconda-latest/bin:$PATH\\"\\necho \\"Downloading Miniconda installer ...\\"\\nconda_installer=\\"/tmp/miniconda.sh\\"\\ncurl -fsSL -o \\"$conda_installer\\" https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh\\nbash \\"$conda_installer\\" -b -p /opt/miniconda-latest\\nrm -f \\"$conda_installer\\"\\nconda update -yq -nbase conda\\n# Prefer packages in conda-forge\\nconda config --system --prepend channels conda-forge\\n# Packages in lower-priority channels not considered if a package with the same\\n# name exists in a higher priority channel. Can dramatically speed up installations.\\n# Conda recommends this as a default\\n# https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-channels.html\\nconda config --set channel_priority strict\\nconda config --system --set auto_update_conda false\\nconda config --system --set show_channel_urls true\\n# Enable `conda activate`\\nconda init bash\\nconda env create  --name csp --file /tmp/test_env.yml\\n# Clean up\\nsync && conda clean --all --yes && sync\\nrm -rf ~/.cache/pip/*" \
-      } \
-    }, \
-    { \
-      "name": "user", \
-      "kwds": { \
-        "user": "csp" \
+        "command": "apt-get update -qq\\napt-get install -y -q --no-install-recommends \\\\\\n    bzip2 \\\\\\n    ca-certificates \\\\\\n    curl\\nrm -rf /var/lib/apt/lists/*\\n# Install dependencies.\\nexport PATH=\\"/opt/miniconda-latest/bin:$PATH\\"\\necho \\"Downloading Miniconda installer ...\\"\\nconda_installer=\\"/tmp/miniconda.sh\\"\\ncurl -fsSL -o \\"$conda_installer\\" https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh\\nbash \\"$conda_installer\\" -b -p /opt/miniconda-latest\\nrm -f \\"$conda_installer\\"\\nconda update -yq -nbase conda\\n# Prefer packages in conda-forge\\nconda config --system --prepend channels conda-forge\\n# Packages in lower-priority channels not considered if a package with the same\\n# name exists in a higher priority channel. Can dramatically speed up installations.\\n# Conda recommends this as a default\\n# https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-channels.html\\nconda config --set channel_priority strict\\nconda config --system --set auto_update_conda false\\nconda config --system --set show_channel_urls true\\n# Enable `conda activate`\\nconda init bash\\nconda env create  --name csp --file /tmp/environment.yml\\n# Clean up\\nsync && conda clean --all --yes && sync\\nrm -rf ~/.cache/pip/*" \
       } \
     }, \
     { \
       "name": "run", \
       "kwds": { \
-        "command": "mkdir /home/csp/data && chmod 777 /home/csp/data && chmod a+s /home/csp/data" \
+        "command": "mkdir /code && chmod 777 /code && chmod a+s /code" \
       } \
     }, \
     { \
       "name": "run", \
       "kwds": { \
-        "command": "mkdir /home/csp/output && chmod 777 /home/csp/output && chmod a+s /home/csp/output" \
+        "command": "mkdir /data && chmod 777 /data && chmod a+s /data" \
       } \
     }, \
     { \
       "name": "run", \
       "kwds": { \
-        "command": "mkdir /home/csp/code && chmod 777 /home/csp/code && chmod a+s /home/csp/code" \
+        "command": "mkdir /output && chmod 777 /output && chmod a+s /output" \
       } \
     }, \
     { \
       "name": "run", \
       "kwds": { \
-        "command": "mkdir /home/csp/.jupyter && echo c.NotebookApp.ip = \\\\\\"0.0.0.0\\\\\\" > home/csp/.jupyter/jupyter_notebook_config.py" \
+        "command": "mkdir ~root/.jupyter" \
+      } \
+    }, \
+    { \
+      "name": "run", \
+      "kwds": { \
+        "command": "echo c.NotebookApp.ip = \\\\\\"0.0.0.0\\\\\\" > ~root/.jupyter/jupyter_notebook_config.py" \
+      } \
+    }, \
+    { \
+      "name": "run", \
+      "kwds": { \
+        "command": "echo c.NotebookApp.allow_root=True >> ~root/.jupyter/jupyter_notebook_config.py" \
+      } \
+    }, \
+    { \
+      "name": "run", \
+      "kwds": { \
+        "command": "echo source activate csp >> ~root/.bashrc" \
       } \
     }, \
     { \
       "name": "workdir", \
       "kwds": { \
-        "path": "/home/csp/code" \
-      } \
-    }, \
-    { \
-      "name": "run", \
-      "kwds": { \
-        "command": "echo source activate csp >> /home/csp/.bashrc" \
+        "path": "/code" \
       } \
     } \
   ] \
 }' > /.reproenv.json
-USER csp
 # End saving to specification to JSON.
