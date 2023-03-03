@@ -3,70 +3,37 @@
 # halt, if script produces an error
 set -e
 
-#Credits for usage of getopts: https://gist.github.com/magnetikonline/22c1eb412daa350eeceee76c97519da8
-ARGUMENT_LIST=(
-  "mode"
-  "yaml-file"
-)
+################################################################################################
+# Parse user input #############################################################################
+################################################################################################
 
-#set defaults
-mode="normal"
-python ./tcy/tcy.py linux --tsv_path ./tcy/packages.tsv
-conda_yml_file=environment.yml
-echo "HINT:
-    The script defaults to just create the Dockerfile and use the conda environment created by the submodule.
-    To build and run the the docker container set the argument '--mode testing'.
-    To give a custom yml-file set the argument '--yaml-file pathtofile.yml (Make sure that the .yml file does not contain a name nor a prefix)"
+# Set defaults: If not otherwise specified with -t and -y flags, do not run in testing mode
+# and use environment.yml as provided by the tcy-submodule
+testing=false
+python ./tcy/tcy.py linux --tsv_path ./tcy/packages.tsv && yaml_file=environment.yml
 
-# read arguments
-opts=$(getopt \
-  --longoptions "$(printf "%s:," "${ARGUMENT_LIST[@]}")" \
-  --name "$(basename "$0")" \
-  --options "" \
-  -- "$@"
-)
-
-eval set --$opts
-
-while [[ $# -gt 0 ]]; do
-  case "$1" in
-    --mode)
-      if [ $2 = "normal" ]
-      then
-        #echo "The execution mode has been set to 'normal'"
-        mode="normal"
-      elif [ $2 = "testing" ]
-      then
-        #echo "The execution mode has been set to 'testing'"
-        mode="testing"
-      else
-        echo "Error: Invalid value for argument '--mode'! The implemented modes are 'normal' and 'testing'"
-        exit
-    fi
-      shift 2
+while getopts 'ty:' OPTION; do
+  case "$OPTION" in
+    t)
+      testing=true
+      yaml_file=test.yml
       ;;
 
-    --yaml-file)
-      if [ -e $2 ]
-      then
-        #echo "The path for the used yaml-file is $2" 
-        conda_yml_file=$2
-      else
-        echo "Error: No valid path provided for argument '--yaml-file'!"
-        exit
-      fi
-      shift 2
+    y)
+      yaml_file="$OPTARG"
       ;;
 
-    *)
-      break
+    ?)
+      echo "script usage: $(basename $0) [-t] [-y /path/to/file.yml]" >&2
+      exit 1
       ;;
   esac
 done
 
-echo "SETTINGS: The execution mode of the script is $mode and the path to the conda yaml file is $conda_yml_file."
+################################################################################################
+# Function to create a Dockerfile ##############################################################
+################################################################################################
 
-# function to create a dockerfile
 generate_docker() {
     docker run -i --rm repronim/neurodocker:0.9.4 generate docker \
         --base-image neurodebian:stretch-non-free \
@@ -77,10 +44,10 @@ generate_docker() {
             octave \
         --spm12 version=r7771 \
         --freesurfer version=7.1.1 \
-        --copy $conda_yml_file /tmp/ \
+        --copy $yaml_file /tmp/ \
         --miniconda \
             version=latest \
-            yaml_file=/tmp/$conda_yml_file \
+            yaml_file=/tmp/$yaml_file \
             env_name=csp \
         --run 'mkdir /code && chmod 777 /code && chmod a+s /code' \
         --run 'mkdir /data && chmod 777 /data && chmod a+s /data' \
@@ -93,25 +60,29 @@ generate_docker() {
         --workdir '/code'
 }
 
+################################################################################################
+# Run functions as required ####################################################################
+################################################################################################
+
 build_docker() {
     docker build -t csp_docker:test .
 }
 
 run_docker(){
-    docker run -t -i --rm -p 8888:8888 -v ${PWD}/testing/code:/code -v ${PWD}/testing/data:/data -v ${PWD}/testing/output:/output csp_docker:test
+    docker run -ti --rm \
+    -v ${PWD}/testing/code:/code  \
+    -v ${PWD}/testing/data:/data \
+    -v ${PWD}/testing/cache:/cache \
+    -v ${PWD}/testing/output:/output \
+    -p 8888:8888 \
+    csp_docker:test
 }
-# generate Dockerfile
 
-if [ $mode = "testing" ]
+if $testing
 then
-    generate_docker > Dockerfile
-    echo "SUCCESS: Dockerfile generated!"
-    build_docker
-    echo "SUCCESS: Docker image built!"
-    run_docker
-elif [ $mode = "normal" ]
-then
-    generate_docker > Dockerfile
-    echo "SUCCESS: Dockerfile generated!"
+  echo "Running in testing mode: generate Dockerfile with $yaml_file as input, build image and run as container"
+  generate_docker > Dockerfile && build_docker && run_docker
+else
+  echo "Running in normal mode: only generate Dockerfile with $yaml_file as input"
+  generate_docker > Dockerfile
 fi
-
