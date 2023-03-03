@@ -1,4 +1,7 @@
 dependencies:
-  - jupyterlab
-  - nipype
-  - pandas
+- jupyterlab
+- pandas
+- nipype
+- pip
+- pip:
+  - networkx < 3.0
