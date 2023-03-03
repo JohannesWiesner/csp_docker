@@ -24,10 +24,10 @@ Neurodocker is able to create `.sif` files. However, you can also convert the Do
 
 Because it can be tedious to always execute steps 2-4 while developing and because the creation of conda environments can take quite long, we included two more options:
 
-1. It is possible to provide a `.yml` file of your choice using:
- `bash generate_dockerfile.sh --yaml-file path/to/your/file.yml`. We included a `test_env.yml` file within this repository with only `jupyter-lab` and `nipype` serving as a [MVP](https://de.wikipedia.org/wiki/Minimum_Viable_Product).
-2. It is possible to run steps 2-4 in one go by using:
-`bash generate_dockerfile.sh --mode testing`. This will mount the subfolders of the included `/testing` directory to the container.
+- It is possible to provide a `.yml` file of your choice using the `-y` option (e.g.  `bash generate_dockerfile.sh -y path/to/your/file.yml`).
+We included a `test.yml` file within this repository with a couple of packages that are mostly needed to run nipype-analyses serving as a [MVP](https://de.wikipedia.org/wiki/Minimum_Viable_Product).
+- It is possible to run steps 2-4 in one go using the `-t` option
+(e.g. `bash generate_dockerfile.sh -t`). This will generate the Dockerfile, build the image and run it as a container while also mounting the subfolders of the included  `/testing` directory to it.
 
 ### Further notes to developers
 1. Make sure you run `generate_dockerfile.sh`  and `docker build` on a regular basis (preferably after every single edit). This is tedious but in our experience, too many edits at once make it hard to debug what went wrong. The neurodocker image is still under heavy development which means that it is not guaranteed that every combination of arguments that you pass to `docker run -i --rm repronim/neurodocker:x.x.x generate docker` will lead to a bug-free Dockerfile.
