@@ -84,6 +84,7 @@ generate_docker() {
             env_name=csp \
         --run 'mkdir /code && chmod 777 /code && chmod a+s /code' \
         --run 'mkdir /data && chmod 777 /data && chmod a+s /data' \
+        --run 'mkdir /cache && chmod 777 /cache && chmod a+s /cache' \
         --run 'mkdir /output && chmod 777 /output && chmod a+s /output' \
         --run 'mkdir ~root/.jupyter' \
         --run 'echo c.NotebookApp.ip = \"0.0.0.0\" > ~root/.jupyter/jupyter_notebook_config.py' \
