@@ -1,0 +1,3 @@
+# folders that should be ignored during docker buid. This will speed up the process, because otherwise docker will load all directories into RAM.
+testing/
+tcy/
