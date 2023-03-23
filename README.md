@@ -1,4 +1,3 @@
-
 # Generating a docker image for the Complex Systems in Psychiatry Group (CSP)
 ## Aims
 This repository uses both [neurodocker](https://github.com/ReproNim/neurodocker) and [tcy](https://github.com/JohannesWiesner/tcy) to create a standardized Docker-Image for the Complex Systems in Psychiatry Lab. It includes most of the software that the CSP-members need (A conda environment with Python & R  and a  bunch of of cool libraries, SPM, Freesurfer, etc.)
@@ -31,15 +30,14 @@ We included a `test.yml` file within this repository with a couple of packages t
 (e.g. `bash generate_dockerfile.sh -t`). This will generate the Dockerfile, build the image and run it as a container while also mounting the subfolders of the included  `/testing` directory to it.
 
 ### Further notes to developers
-1. Make sure you run `generate_dockerfile.sh`  and `docker build` on a regular basis (preferably after every single edit). This is tedious but in our experience, too many edits at once make it hard to debug what went wrong. The neurodocker image is still under heavy development which means that it is not guaranteed that every combination of arguments that you pass to `docker run -i --rm repronim/neurodocker:x.x.x generate docker` will lead to a bug-free Dockerfile.
-2. The currently used base-image `neurodebian:stretch-non-free` is quite old and we would wish to switch to a newer version of neurodebian. However, with newer base images a lot of bugs happen and software like SPM12 could not be installed using the neurodocker flags. (This is also tightly related to the first point, so make sure the image can be built and the container runs error free when using a different base image).
-3. Generally, there are two options to include neuroimaging software within the docker image. You can either use neurodebian as a base image and its included [APT](https://de.wikipedia.org/wiki/Advanced_Packaging_Tool) package manager to install software or you use the included flags of neurodocker (e.g. `--spm12` , which in theory should enable you to use any base image that you want). We are currently using a mixture of both options as we were unable to install everything with just neurodocker. The long-term goal is to switch to a newer (and slimmer) base image and to install everything what we need with only using the neurodocker flags.
+1.  This repository contains a bash script `download_test_data.sh` that you can use to download a functional and anatomical image from openneuro.org using [`openneuro-py`](https://github.com/hoechenberger/openneuro-py). Note that you must install `openneuro-py` beforehand by following the [installation instructions](https://github.com/hoechenberger/openneuro-py#installation).
+3. Make sure you run `generate_dockerfile.sh`  and `docker build` on a regular basis (preferably after every single edit). This is tedious but in our experience, too many edits at once make it hard to debug what went wrong. The neurodocker image is still under heavy development which means that it is not guaranteed that every combination of arguments that you pass to `docker run -i --rm repronim/neurodocker:x.x.x generate docker` will lead to a bug-free Dockerfile.
+4. The currently used base-image `neurodebian:stretch-non-free` is quite old and we would wish to switch to a newer version of neurodebian. However, with newer base images a lot of bugs happen and software like SPM12 could not be installed using the neurodocker flags. (This is also tightly related to the first point, so make sure the image can be built and the container runs error free when using a different base image).
+5. Generally, there are two options to include neuroimaging software within the docker image. You can either use neurodebian as a base image and its included [APT](https://de.wikipedia.org/wiki/Advanced_Packaging_Tool) package manager to install software or you use the included flags of neurodocker (e.g. `--spm12` , which in theory should enable you to use any base image that you want). We are currently using a mixture of both options as we were unable to install everything with just neurodocker. The long-term goal is to switch to a newer (and slimmer) base image and to install everything what we need with only using the neurodocker flags.
 ### Notes to CIMH members
 1. In case you are working at the CIMH and you get SSL-Errors, reach out to us via e-mail.
-2. In case you have a Linux installation on your machine but do not have root-rights, it makes sense to map the root-user id inside the docker container (which is always `0`) to your docker group id. Otherwise you will not be able to delete or manipulate files that were created by the root-user inside the docker container). This can be done by adding the `-u` option to `docker run`. E.g.:
+2. In case you run into file-permission errors (e.g. can't create files in your mounted directories),  it makes sense to pass your host id and group to the docker container. This can be done by adding the `-u` option to `docker run`. E.g.:
 
-   `docker run ... -u 0:your_dockergroup_id`
+   `docker run ... -u $(id -u):$(id -g)`
 
-   You can find out your docker group id by running:
-
-   `getent group docker | cut -d: -f3`
+    Using this option makes sure, that the user "inside the container" has the same user and group id as the host user. So whatever directories or files you created outside the container, they can now be manipulated by the container user.
