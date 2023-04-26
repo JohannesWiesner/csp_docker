@@ -42,22 +42,21 @@ generate_docker() {
             gcc \
             g++ \
             octave \
-        --spm12 version=r7771 \
-        --freesurfer version=7.1.1 \
+        --matlabmcr version=2017b \
+        --cat12 version=r1933_R2017b \
         --copy $yaml_file /tmp/ \
         --miniconda \
             version=latest \
             yaml_file=/tmp/$yaml_file \
             env_name=csp \
-        --run 'mkdir /code && chmod 777 /code && chmod a+s /code' \
-        --run 'mkdir /data && chmod 777 /data && chmod a+s /data' \
-        --run 'mkdir /cache && chmod 777 /cache && chmod a+s /cache' \
-        --run 'mkdir /output && chmod 777 /output && chmod a+s /output' \
-        --run 'mkdir ~root/.jupyter' \
-        --run 'echo c.NotebookApp.ip = \"0.0.0.0\" > ~root/.jupyter/jupyter_notebook_config.py' \
-        --run 'echo c.NotebookApp.allow_root=True >> ~root/.jupyter/jupyter_notebook_config.py' \
-        --run 'echo source activate csp >> ~root/.bashrc' \
-        --workdir '/code'
+        --user csp \
+        --run 'mkdir /home/csp/code && chmod -R 777 /home/csp/code' \
+        --run 'mkdir /home/csp/data && chmod -R 777 /home/csp/data' \
+        --run 'mkdir /home/csp/cache && chmod -R 777 /home/csp/cache' \
+        --run 'mkdir /home/csp/output && chmod -R 777 /home/csp/output' \
+        --run 'mkdir /home/csp/.jupyter && echo c.NotebookApp.ip = \"0.0.0.0\" > home/csp/.jupyter/jupyter_notebook_config.py' \
+        --workdir /home/csp/code \
+        --run 'echo source activate csp >> /home/csp/.bashrc'
 }
 
 ################################################################################################
@@ -70,10 +69,10 @@ build_docker() {
 
 run_docker(){
     docker run -ti --rm \
-    -v ${PWD}/testing/code:/code  \
-    -v ${PWD}/testing/data:/data \
-    -v ${PWD}/testing/cache:/cache \
-    -v ${PWD}/testing/output:/output \
+    -v ${PWD}/testing/code:/home/csp/code  \
+    -v ${PWD}/testing/data:/home/csp/data \
+    -v ${PWD}/testing/cache:/home/csp/cache \
+    -v ${PWD}/testing/output:/home/csp/output \
     -p 8888:8888 \
     csp_docker:test
 }
