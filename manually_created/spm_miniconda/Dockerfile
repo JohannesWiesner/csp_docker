@@ -37,7 +37,7 @@ RUN wget --no-check-certificate --progress=bar:force -P /opt https://www.fil.ion
  && chmod +x /opt/spm${SPM_VERSION}/spm${SPM_VERSION}
 
 # Add conda installation derived from Neurodocker
-COPY ["workshop.yml", \
+COPY ["environment.yml", \
       "/tmp/"]
 ENV CONDA_DIR="/opt/miniconda-latest" \
     PATH="/opt/miniconda-latest/bin:$PATH"
@@ -59,7 +59,7 @@ RUN export PATH="/opt/miniconda-latest/bin:$PATH" \
     && conda config --system --set show_channel_urls true \
     # Enable `conda activate`
     && conda init bash \
-    && conda env create  --name csp --file /tmp/workshop.yml \
+    && conda env create  --name csp --file /tmp/environment.yml \
     # Clean up
     && sync && conda clean --all --yes && sync \
     && rm -rf ~/.cache/pip/*
