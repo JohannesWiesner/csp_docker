@@ -3,6 +3,7 @@ dependencies:
 - pandas
 - nipype
 - nilearn
+- pybids
 - pip
 - pip:
   - networkx < 3.0
